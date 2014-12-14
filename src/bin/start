@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+var mode = '!!BUILD!!';
+
+var app = require('../server/app')(mode);
+
+var server = app.listen(mode === 'prod' ? 80 : 5000, function() {
+  console.log('Express server listening on port ' + server.address().port);
+});

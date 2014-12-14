@@ -1,0 +1,15 @@
+{
+  // Enable extra warnings
+  "curly":    true,     // No single line conditional statements
+  "eqeqeq":   true,     // Always use 'a === b'
+  "forin":    true,     // Don't iterate through object items without using hasOwnProperty
+  "indent":   4,        // 4 spaces for tabs
+  "noarg":    true,     // Prohibits the use of arguments.caller / arguments.callee
+  "nonew":    true,     // Can't call new without assigning result
+  "undef":    true,     // Can't use undefined variable
+  //"newcap":   false,    // Don't care about capatilisng constructors (React invokes its components without new).
+
+  // Allow global variables from:
+  "node":     true,
+  "browser":  true
+}
