@@ -28,7 +28,7 @@ module.exports = React.createClass({
                 </body>
             </html>
         );
-    },
+    }
 
 });
 

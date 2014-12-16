@@ -16,7 +16,7 @@ module.exports = function() {
         'other': {
             path: '/Other/',
             render: function(request) {
-                this.render(require('./pages/other'));
+                this.render(require('./pages/calendar'));
             }
         }
     };

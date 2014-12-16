@@ -2,16 +2,17 @@
  * @jsx React.createElement
  */
 
+var Calendar = require('../components/calendar');
+
 module.exports = function(props) {
-    'use strict';
 
     var React = require('react');
     var Page = require('./page');
 
     return (
-        <Page title='Other page'>
-            <div>Other page!</div>
-            <a href="/">Main page</a>
+        <Page title='Calendar'>
+            <h1>Other page!</h1>
+            <Calendar month="2014-12"/>
         </Page>
     );
 };
