@@ -5,6 +5,7 @@
 'use strict';
 
 var Gulp =          require('gulp');
+var GulpUtil =      require('gulp-util')
 var Forever =       require('forever-monitor');
 var Plugins =       require('gulp-load-plugins')();
 var SourceMaps =    require('gulp-sourcemaps');
@@ -22,6 +23,9 @@ var sources = {
     server:                 './src/server/**/*',
     routes:                 './src/javascript/routes.js'
 }
+
+var onError = GulpUtil.log;
+process.on('uncaughtException', onError);
 
 /*-----------------------------------------------------------------------------------------------*\
   Site build tasks
@@ -63,6 +67,7 @@ builds.forEach(function (build) {
         });
 
         return Gulp.src(sources.clientMain)
+            .pipe(Plugins.plumber({errorHandler: onError}))
             .pipe(browserify)
             .pipe(Plugins.concat('main.js'))
             .pipe(Plugins.replace('!!BUILD!!', build))
@@ -95,6 +100,7 @@ builds.forEach(function (build) {
         var jsxFilter = Plugins.filter('**/*.jsx');
 
         return Gulp.src([sources.server, sources.routes, sources.javascript])
+            .pipe(Plugins.plumber({errorHandler: onError}))
             .pipe(Plugins.replace("require('../javascript/","require('./"))
             .pipe(Plugins.react())
             .pipe(Plugins.rename({extname: '.js'}))

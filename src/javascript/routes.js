@@ -13,8 +13,8 @@ module.exports = function() {
                 this.render(require('./pages/root'));
             }
         },
-        'other': {
-            path: '/Other/',
+        'calendar': {
+            path: '/Calendar/',
             render: function(request) {
                 this.render(require('./pages/calendar'));
             }

@@ -3,6 +3,7 @@
  */
 
 var Calendar = require('../components/calendar');
+var moment = require('moment');
 
 module.exports = function(props) {
 
@@ -12,7 +13,8 @@ module.exports = function(props) {
     return (
         <Page title='Calendar'>
             <h1>Other page!</h1>
-            <Calendar month="2014-12"/>
+            <Calendar />
+            <a href="/">Main page</a>
         </Page>
     );
 };

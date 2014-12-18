@@ -2,11 +2,13 @@
  * @param mode Either 'dev' or 'prod'
  */
 
+var Util =          require('../javascript/util');
+var Compression =   require('compression')
 
 module.exports = function(mode)
 {   'use strict';
 
-    var Util = require('../javascript/util');
+
     Util.config.inBrowser = false;
     Util.config.isDevelopment = (mode === 'dev');
 
@@ -26,6 +28,7 @@ module.exports = function(mode)
 
     var app = Express()
         .use(MonorouterExpress(Routes))
+        .use(Compression({threshold: 512}))
         .get('/main.js', function(req, res) {
             res.sendFile('/main.js', options);
         })

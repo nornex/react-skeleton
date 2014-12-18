@@ -18,21 +18,23 @@ var CalendarCell = React.createClass({
     /// Is this day in the month we're displaying, or one of the extras either side.
     isInDisplayedMonth: function()
     {
-        return (this.props.month.isSame(this.props.date.month()));
+        return (this.props.month.isSame(this.props.date.clone().startOf('month')));
     },
 
     render: function()
     {
         var boxStyle = {
-            width: '100px', height: '100px'
+            width: '60px', height: '60px',
+            color: this.isInDisplayedMonth() ? 'black' : '#ccc'
         };
+
 
         var contentStyle = {
 
         };
 
         var labelStyle = {
-            'text-align': 'right'
+            textAlign: 'right'
         };
 
         return (
@@ -46,6 +48,14 @@ var CalendarCell = React.createClass({
 
 module.exports = React.createClass({
 
+    getDefaultProps: function() {
+        return {
+            month: new Date()
+        };
+    },
+
+    month: function() { return moment(this.props.month).startOf('month'); },
+
     daysOfTheWeek: function()
     {
         return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -54,50 +64,50 @@ module.exports = React.createClass({
     /// First day to display, if we're not starting on Monday this will be a day in the previous month
     firstDisplayDay: function()
     {
-        return this.props.month.subtract({days: this.props.month.weekday()});
+        return this.month().subtract({days: this.month().weekday()});
     },
 
     /// Last day to display, if we're not ending on Sunday this will be a day in the next month
     lastDisplayDay: function()
     {
-        return this.props.month.add({
-            days: 6 - this.props.month.endOf('month').weekday()
+        return this.month().endOf('month').add({
+            days: 6 - this.month().endOf('month').weekday()
         });
     },
 
     render: function() {
 
-        var month = this.props.month;
+        var rowStyle = {display: 'flex', flexDirection: 'row'};
 
         var headers = this.daysOfTheWeek().map(function(day){
-            return <span key={day}>{day}</span>;
+            return <div key={day} style={{ width: '60px' }}>{day}</div>;
         });
 
         var rows = [];
         var currentRow = null;
-        var before = this.lastDisplayDay().add({days: 1});
-
-        console.log("Month:");
-        console.log( moment().startOf('month').format());
-
-        for (var currentDay = this.firstDisplayDay(); currentDay.isBefore(before); currentDay.add({days: 1}))
-        {
+        var processDay = function(currentDay) {
             if (currentDay.weekday() === 0)
             {
                 currentRow = [];
-                rows.append(currentRow);
+                rows.push(currentRow);
             }
 
-            currentRow.append(<CalendarCell month={this.props.month} date={currentDay} key={currentDay.unix()}/>);
+            currentRow.push(<CalendarCell month={this.month()} date={currentDay} key={currentDay.unix()}/>);
+        }.bind(this);
+
+        var before = this.lastDisplayDay();
+        for (var currentDay = this.firstDisplayDay(); currentDay.isBefore(before); currentDay.add({days: 1}))
+        {
+            processDay(currentDay.clone());
         }
 
-        var newRows = rows.map(function (row) {
-            return <div className="calendarRow">{row}</div>;
+        var newRows = rows.map(function (row, i) {
+            return <div className="calendarRow" style={rowStyle} key={i}>{row}</div>;
         });
 
         return (
             <div className="calendar">
-                <div>{headers}</div>
+                <div style={rowStyle}>{headers}</div>
                 {newRows}
             </div>
         );

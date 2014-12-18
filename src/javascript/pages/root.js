@@ -10,8 +10,8 @@ module.exports = function(props) {
 
     return (
         <Page title='Root page'>
-            <div>Hello world<b>a</b>!</div>
-            <a href="/Other/">Other page</a>
+            <div>Hello <b>world</b>!</div>
+            <a href="/Calendar/">Other page</a>
         </Page>
     );
 };
