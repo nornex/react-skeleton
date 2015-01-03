@@ -13,7 +13,7 @@ module.exports = function(mode)
     Util.config.isDevelopment = (mode === 'dev');
 
     var Express = require('express');
-    var Routes = require('../javascript/routes');
+    var Router = require('../javascript/routes').router;
     var Path = require('path');
     var MonorouterExpress = require('connect-monorouter');
 
@@ -27,7 +27,7 @@ module.exports = function(mode)
     };
 
     var app = Express()
-        .use(MonorouterExpress(Routes))
+        .use(MonorouterExpress(Router))
         .use(Compression({threshold: 512}))
         .get('/main.js', function(req, res) {
             res.sendFile('/main.js', options);

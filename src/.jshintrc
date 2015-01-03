@@ -11,5 +11,6 @@
 
   // Allow global variables from:
   "node":     true,
-  "browser":  true
+  "browser":  true,
+  "esnext":   true
 }

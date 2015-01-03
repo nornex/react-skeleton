@@ -1,7 +1,8 @@
 /** @jsx React.createElement */
 
-var React = require('react');
-var Util = require('../util');
+var React =         require('react');
+var Style =         require('../style');
+var Util =          require('../util');
 
 module.exports = React.createClass({
 
@@ -23,6 +24,7 @@ module.exports = React.createClass({
                 </head>
                 <body>
                     <script type="text/javascript" src="/main.js"></script>
+                    {Style.styleElement()}
                     {liveReload}
                     {this.props.children}
                 </body>

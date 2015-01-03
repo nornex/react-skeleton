@@ -12,6 +12,7 @@ var SourceMaps =    require('gulp-sourcemaps');
 var Browserify =    require('browserify');
 var Transform =     require('vinyl-transform');
 var Reactify =      require('reactify');
+var To5ify =        require("6to5ify");
 var del =           require('del');
 
 var sources = {
@@ -63,6 +64,7 @@ builds.forEach(function (build) {
                     basedir: './'
                 })
                 .transform(Reactify)
+                .transform(To5ify)
                 .bundle();
         });
 
@@ -128,7 +130,9 @@ builds.forEach(function (build) {
 \*-----------------------------------------------------------------------------------------------*/
 
 Gulp.task('run-dev-server', ['watch'], function() {
-    var child = new (Forever.Monitor)('./dist/dev/bin/start');
+    var child = new (Forever.Monitor)('./dist/dev/bin/start', {
+        command: 'node --harmony --use-strict'
+    });
 
     Plugins.livereload.listen();
 
@@ -140,31 +144,32 @@ Gulp.task('run-dev-server', ['watch'], function() {
 
     child.start();
 
-    var batching = false;
-    var reloadBrowser = function () {
-        if (!batching) {
+    var batch = 0;
+    var reloadBrowser = function (thisBatch) {
+        if (thisBatch === batch) {
             Plugins.livereload.changed();
         }
     };
-    var restartServer = function () {
-        batching = false;
-        console.log("Restarting web server...");
-        child.restart();
-        setTimeout(reloadBrowser, 200);
+    var restartServer = function (thisBatch) {
+        if (thisBatch === batch) {
+            console.log("Restarting web server...");
+            child.restart();
+            setTimeout(reloadBrowser, 1000, thisBatch);
+        }
     };
 
     Gulp.watch(['dist/dev/**']).on('change', function()
     {
-        if (!batching)
-        {
-            batching = true;
-            setTimeout(restartServer, 600);
-        }
+        var thisBatch = ++batch;
+        setTimeout(restartServer, 500, thisBatch);
+        
     });
 });
 
 Gulp.task('run-prod-server', ['prod'], function() {
-    var child = new (Forever.Monitor)('./dist/prod/bin/start');
+    var child = new (Forever.Monitor)('./dist/prod/bin/start', {
+        command: 'node --harmony --use-strict'
+    });
 
 
     process.on('SIGINT', function () {

@@ -2,6 +2,8 @@
  * @jsx React.createElement
  */
 
+ var links = require('../routes').links;
+
 module.exports = function(props) {
     'use strict';
 
@@ -9,9 +11,9 @@ module.exports = function(props) {
     var Page = require('./page');
 
     return (
-        <Page title='Root page'>
+        <Page title='Front page'>
             <div>Hello <b>world</b>!</div>
-            <a href="/Calendar/">Other page</a>
+            <a href={links.calendar()}>Other page</a>
         </Page>
     );
 };
